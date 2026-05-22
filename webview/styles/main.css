@@ -1,0 +1,1124 @@
+/* ============================================================
+   AI Builder Workspace — Main Stylesheet
+   Uses VS Code CSS variables for seamless theme integration.
+   NO hardcoded colors except for category/priority accent badges.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. Reset & Base
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 13px;
+}
+
+body {
+  font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: var(--vscode-font-size, 13px);
+  color: var(--vscode-sideBar-foreground, var(--vscode-editor-foreground));
+  background-color: var(--vscode-sideBar-background, var(--vscode-editor-background));
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ----------------------------------------------------------
+   2. Custom Scrollbar
+   ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--vscode-scrollbarSlider-background, rgba(128, 128, 128, 0.3));
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--vscode-scrollbarSlider-hoverBackground, rgba(128, 128, 128, 0.5));
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--vscode-scrollbarSlider-activeBackground, rgba(128, 128, 128, 0.6));
+}
+
+/* ----------------------------------------------------------
+   3. Animations / Keyframes
+   ---------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInFast {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(40px) scale(0.92); }
+}
+
+@keyframes progressGrow {
+  from { width: 0%; }
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ----------------------------------------------------------
+   4. Tab Bar
+   ---------------------------------------------------------- */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--vscode-sideBar-background, var(--vscode-editor-background));
+  border-bottom: 1px solid var(--vscode-panel-border, var(--vscode-widget-border, rgba(128,128,128,0.2)));
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--vscode-descriptionForeground, rgba(255,255,255,0.5));
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  white-space: nowrap;
+  position: relative;
+}
+
+.tab-item:hover {
+  color: var(--vscode-sideBar-foreground, var(--vscode-editor-foreground));
+  background-color: var(--vscode-list-hoverBackground, rgba(128,128,128,0.1));
+}
+
+.tab-item.active {
+  color: var(--vscode-sideBar-foreground, var(--vscode-editor-foreground));
+  border-bottom-color: var(--vscode-focusBorder, var(--vscode-textLink-foreground, #007acc));
+  font-weight: 600;
+}
+
+.tab-item .tab-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.tab-item .tab-label {
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+}
+
+/* ----------------------------------------------------------
+   5. Tab Content Panels
+   ---------------------------------------------------------- */
+.tab-content {
+  display: none;
+  padding: 12px 10px 20px;
+  flex: 1;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ----------------------------------------------------------
+   6. Cards
+   ---------------------------------------------------------- */
+.card {
+  background-color: var(--vscode-editor-background, #1e1e1e);
+  border: 1px solid var(--vscode-panel-border, var(--vscode-widget-border, rgba(128,128,128,0.18)));
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.15s ease;
+  position: relative;
+  animation: cardAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.card:hover {
+  border-color: var(--vscode-focusBorder, rgba(128,128,128,0.4));
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vscode-editor-foreground);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.card-body {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 6px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ----------------------------------------------------------
+   7. Forms — Inputs, Textareas, Selects
+   ---------------------------------------------------------- */
+.input-field,
+.textarea-field,
+.select-field {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--vscode-input-foreground, var(--vscode-editor-foreground));
+  background-color: var(--vscode-input-background, rgba(0,0,0,0.2));
+  border: 1px solid var(--vscode-input-border, rgba(128,128,128,0.25));
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:focus,
+.textarea-field:focus,
+.select-field:focus {
+  border-color: var(--vscode-focusBorder, #007acc);
+  box-shadow: 0 0 0 1px var(--vscode-focusBorder, #007acc);
+}
+
+.input-field::placeholder,
+.textarea-field::placeholder {
+  color: var(--vscode-input-placeholderForeground, rgba(128,128,128,0.6));
+}
+
+.textarea-field {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.select-field {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+.select-field option {
+  background-color: var(--vscode-dropdown-background, var(--vscode-input-background));
+  color: var(--vscode-dropdown-foreground, var(--vscode-input-foreground));
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--vscode-editor-foreground);
+  margin-bottom: 5px;
+  letter-spacing: 0.02em;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* ----------------------------------------------------------
+   8. Buttons
+   ---------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* Primary */
+.btn-primary {
+  color: var(--vscode-button-foreground, #fff);
+  background-color: var(--vscode-button-background, #007acc);
+}
+
+.btn-primary:hover {
+  background-color: var(--vscode-button-hoverBackground, #005fa3);
+}
+
+/* Secondary */
+.btn-secondary {
+  color: var(--vscode-button-secondaryForeground, var(--vscode-editor-foreground));
+  background-color: var(--vscode-button-secondaryBackground, rgba(128,128,128,0.15));
+  border: 1px solid var(--vscode-input-border, rgba(128,128,128,0.25));
+}
+
+.btn-secondary:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground, rgba(128,128,128,0.25));
+}
+
+/* Danger */
+.btn-danger {
+  color: #fff;
+  background-color: #c74e4e;
+}
+
+.btn-danger:hover {
+  background-color: #a33a3a;
+}
+
+/* Icon button — small circular */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 14px;
+  color: var(--vscode-descriptionForeground, rgba(128,128,128,0.7));
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover {
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-list-hoverBackground, rgba(128,128,128,0.12));
+}
+
+.btn-icon:active {
+  transform: scale(0.9);
+}
+
+.btn-icon.btn-icon-danger:hover {
+  color: var(--vscode-errorForeground, #f44);
+  background-color: rgba(244, 68, 68, 0.1);
+}
+
+.btn-icon.btn-icon-success:hover {
+  color: var(--vscode-terminal-ansiGreen, #4ec94e);
+  background-color: rgba(78, 201, 78, 0.1);
+}
+
+/* Small variant */
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+/* Full width */
+.btn-block {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------
+   9. Search Bar
+   ---------------------------------------------------------- */
+.search-bar {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--vscode-descriptionForeground, rgba(128,128,128,0.5));
+  pointer-events: none;
+  line-height: 1;
+}
+
+.search-bar .input-field {
+  padding-left: 32px;
+}
+
+/* ----------------------------------------------------------
+   10. Tags / Badges
+   ---------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 20px;
+  line-height: 1.5;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Category badges */
+.badge-codegen {
+  background-color: rgba(56, 132, 255, 0.15);
+  color: #5b9aff;
+}
+
+.badge-debug {
+  background-color: rgba(255, 152, 56, 0.15);
+  color: #f5a623;
+}
+
+.badge-refactor {
+  background-color: rgba(180, 100, 255, 0.15);
+  color: #b97aff;
+}
+
+.badge-explain {
+  background-color: rgba(80, 200, 120, 0.15);
+  color: #50c878;
+}
+
+.badge-custom {
+  background-color: rgba(150, 150, 150, 0.15);
+  color: var(--vscode-descriptionForeground, #999);
+}
+
+/* Priority badges */
+.badge-high {
+  background-color: rgba(244, 67, 54, 0.14);
+  color: #f44336;
+}
+
+.badge-medium {
+  background-color: rgba(255, 193, 7, 0.16);
+  color: #e5a800;
+}
+
+.badge-low {
+  background-color: rgba(76, 175, 80, 0.14);
+  color: #4caf50;
+}
+
+/* Status badges */
+.badge-todo {
+  background-color: rgba(158, 158, 158, 0.15);
+  color: var(--vscode-descriptionForeground, #9e9e9e);
+}
+
+.badge-in-progress {
+  background-color: rgba(56, 132, 255, 0.15);
+  color: #5b9aff;
+}
+
+.badge-done {
+  background-color: rgba(76, 175, 80, 0.14);
+  color: #4caf50;
+}
+
+/* ----------------------------------------------------------
+   11. Item List
+   ---------------------------------------------------------- */
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.1));
+  transition: background-color 0.15s ease;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:hover {
+  background-color: var(--vscode-list-hoverBackground, rgba(128,128,128,0.08));
+}
+
+/* ----------------------------------------------------------
+   12. Empty State
+   ---------------------------------------------------------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.empty-state .empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+  filter: grayscale(30%);
+}
+
+.empty-state .empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vscode-editor-foreground);
+  margin-bottom: 6px;
+}
+
+.empty-state .empty-description {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+  max-width: 240px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* ----------------------------------------------------------
+   13. Section Header
+   ---------------------------------------------------------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 10px;
+  gap: 8px;
+}
+
+.section-header .section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+  letter-spacing: 0.01em;
+}
+
+.section-header .section-subtitle {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+  font-weight: 400;
+}
+
+/* ----------------------------------------------------------
+   14. Progress Bar
+   ---------------------------------------------------------- */
+.progress-bar-container {
+  margin-bottom: 12px;
+}
+
+.progress-bar-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.progress-bar-label .progress-text {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+  font-weight: 500;
+}
+
+.progress-bar-label .progress-percent {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--vscode-input-background, rgba(128,128,128,0.15));
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #3884ff, #50c878);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ----------------------------------------------------------
+   15. Item Actions
+   ---------------------------------------------------------- */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   16. Filter Row
+   ---------------------------------------------------------- */
+.filter-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--vscode-descriptionForeground);
+  background: transparent;
+  border: 1px solid var(--vscode-input-border, rgba(128,128,128,0.2));
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  color: var(--vscode-editor-foreground);
+  border-color: var(--vscode-focusBorder, rgba(128,128,128,0.4));
+  background-color: var(--vscode-list-hoverBackground, rgba(128,128,128,0.08));
+}
+
+.filter-btn.active {
+  color: var(--vscode-button-foreground, #fff);
+  background-color: var(--vscode-button-background, #007acc);
+  border-color: var(--vscode-button-background, #007acc);
+}
+
+/* ----------------------------------------------------------
+   17. Modal Overlay
+   ---------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60px;
+  animation: fadeInFast 0.2s ease;
+}
+
+.modal {
+  width: calc(100% - 24px);
+  max-width: 480px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background-color: var(--vscode-editor-background, #1e1e1e);
+  border: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.25));
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+}
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--vscode-descriptionForeground);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modal-close:hover {
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-list-hoverBackground, rgba(128,128,128,0.12));
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.12));
+}
+
+/* ----------------------------------------------------------
+   18. Pin Indicator
+   ---------------------------------------------------------- */
+.pinned-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--vscode-terminal-ansiYellow, #e5c07b);
+  margin-right: 4px;
+  opacity: 0.85;
+}
+
+.pinned-indicator::before {
+  content: '📌';
+  font-size: 11px;
+}
+
+/* ----------------------------------------------------------
+   19. Timestamp
+   ---------------------------------------------------------- */
+.timestamp {
+  font-size: 10.5px;
+  color: var(--vscode-descriptionForeground, rgba(128,128,128,0.6));
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   20. Toast Notification
+   ---------------------------------------------------------- */
+.toast-container {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  min-width: 200px;
+  max-width: 320px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-editor-background, #1e1e1e);
+  border: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.25));
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.toast-dismissing {
+  animation: toastOut 0.25s ease forwards;
+}
+
+.toast-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.toast.toast-success {
+  border-left: 3px solid #4caf50;
+}
+
+.toast.toast-error {
+  border-left: 3px solid #f44336;
+}
+
+.toast.toast-info {
+  border-left: 3px solid var(--vscode-textLink-foreground, #3884ff);
+}
+
+.toast.toast-warning {
+  border-left: 3px solid #f5a623;
+}
+
+/* ----------------------------------------------------------
+   21. Template Variable Highlight
+   ---------------------------------------------------------- */
+.template-var {
+  display: inline;
+  padding: 1px 5px;
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 11.5px;
+  color: var(--vscode-textLink-foreground, #3884ff);
+  background-color: rgba(56, 132, 255, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(56, 132, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   22. Monospace / Code Display
+   ---------------------------------------------------------- */
+.mono {
+  font-family: var(--vscode-editor-font-family, 'Consolas', 'Courier New', monospace);
+  font-size: 12px;
+}
+
+.code-block {
+  display: block;
+  padding: 8px 12px;
+  background-color: var(--vscode-input-background, rgba(0,0,0,0.2));
+  border: 1px solid var(--vscode-input-border, rgba(128,128,128,0.15));
+  border-radius: 6px;
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 12px;
+  color: var(--vscode-editor-foreground);
+  word-break: break-all;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* ----------------------------------------------------------
+   23. Stats Row
+   ---------------------------------------------------------- */
+.stats-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  background-color: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.15));
+  border-radius: 8px;
+}
+
+.stat-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--vscode-descriptionForeground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------
+   24. Workspace Info Card
+   ---------------------------------------------------------- */
+.workspace-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg,
+    var(--vscode-editor-background) 0%,
+    var(--vscode-input-background, rgba(128,128,128,0.05)) 100%
+  );
+  border: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.18));
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.workspace-card .workspace-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.workspace-card .workspace-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+  word-break: break-word;
+}
+
+.workspace-card .workspace-meta {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+}
+
+/* ----------------------------------------------------------
+   25. Note Content Rendering
+   ---------------------------------------------------------- */
+.note-content {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+  line-height: 1.6;
+}
+
+.note-content strong {
+  font-weight: 700;
+  color: var(--vscode-editor-foreground);
+}
+
+.note-content em {
+  font-style: italic;
+}
+
+.note-content code {
+  padding: 1px 5px;
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 11.5px;
+  background-color: var(--vscode-input-background, rgba(0,0,0,0.2));
+  border-radius: 3px;
+}
+
+.note-content ul {
+  padding-left: 18px;
+  margin: 4px 0;
+}
+
+.note-content ul li {
+  margin-bottom: 2px;
+}
+
+/* ----------------------------------------------------------
+   26. History / Run Log
+   ---------------------------------------------------------- */
+.history-section {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vscode-panel-border, rgba(128,128,128,0.12));
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 11.5px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.history-item .history-cmd {
+  font-family: var(--vscode-editor-font-family, monospace);
+  color: var(--vscode-editor-foreground);
+  font-size: 11.5px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item .history-time {
+  font-size: 10px;
+  color: var(--vscode-descriptionForeground);
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   27. Utility Classes
+   ---------------------------------------------------------- */
+.text-muted { color: var(--vscode-descriptionForeground); }
+.text-small { font-size: 11px; }
+.text-center { text-align: center; }
+.mt-4 { margin-top: 4px; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mb-4 { margin-bottom: 4px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.gap-4 { gap: 4px; }
+.gap-8 { gap: 8px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.flex-1 { flex: 1; }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* ----------------------------------------------------------
+   28. Divider
+   ---------------------------------------------------------- */
+.divider {
+  height: 1px;
+  background-color: var(--vscode-panel-border, rgba(128,128,128,0.12));
+  margin: 12px 0;
+}
+
+/* ----------------------------------------------------------
+   29. Run Button (special)
+   ---------------------------------------------------------- */
+.btn-run {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-run:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.btn-run:active {
+  transform: scale(0.96);
+}
+
+/* ----------------------------------------------------------
+   30. Responsive Adjustments
+   ---------------------------------------------------------- */
+@media (max-width: 300px) {
+  .tab-item .tab-label {
+    display: none;
+  }
+  
+  .tab-item .tab-icon {
+    font-size: 16px;
+  }
+  
+  .stats-row {
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    min-width: calc(50% - 4px);
+  }
+}

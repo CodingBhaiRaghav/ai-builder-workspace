@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--
+    Content Security Policy
+    SidebarProvider.ts will replace {{cspSource}} and {{nonce}} with actual values.
+  -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src {{cspSource}} 'unsafe-inline'; script-src 'nonce-{{nonce}}'; font-src {{cspSource}}; img-src {{cspSource}} https: data:;"
+  />
+
+  <title>AI Builder Workspace</title>
+
+  <!--
+    Main stylesheet.
+    SidebarProvider.ts replaces {{styleUri}} with the webview URI for styles/main.css.
+  -->
+  <link href="{{styleUri}}" rel="stylesheet" />
+</head>
+<body>
+  <!--
+    Root container. app.js renders the tab bar and content panels here.
+  -->
+  <div id="app"></div>
+
+  <!--
+    Main app helpers load first so feature modules can use the shared API.
+    SidebarProvider.ts replaces each {{scriptUri_*}} with the corresponding webview URI.
+  -->
+  <script nonce="{{nonce}}" src="{{scriptUri_appJs}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_prompts}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_tasks}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_notes}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_shortcuts}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_memory}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_orchestrator}}"></script>
+  <script nonce="{{nonce}}" src="{{scriptUri_git}}"></script>
+</body>
+</html>

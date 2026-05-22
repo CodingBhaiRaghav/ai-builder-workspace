@@ -1,0 +1,114 @@
+{
+  "name": "ai-builder-workspace",
+  "displayName": "AI Builder Workspace",
+  "description": "Organize AI-assisted coding workflows with prompt management, task tracking, notes, terminal shortcuts, and project memory.",
+  "version": "1.0.0",
+  "publisher": "ai-builder",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Snippets",
+    "Education"
+  ],
+  "keywords": [
+    "ai",
+    "builder",
+    "workspace",
+    "prompt",
+    "task",
+    "productivity"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ai-builder/workspace"
+  },
+  "activationEvents": [
+    "onView:aiBuilderWorkspace.sidebar",
+    "onCommand:aiBuilder.openSidebar",
+    "onCommand:aiBuilder.addPrompt",
+    "onCommand:aiBuilder.addTask",
+    "onCommand:aiBuilder.runShortcut",
+    "onCommand:aiBuilder.exportMemory"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "aiBuilderWorkspace",
+          "title": "AI Builder Workspace",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "aiBuilderWorkspace": [
+        {
+          "type": "webview",
+          "id": "aiBuilderWorkspace.sidebar",
+          "name": "AI Builder"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "aiBuilder.openSidebar",
+        "title": "Open Sidebar",
+        "category": "AI Builder"
+      },
+      {
+        "command": "aiBuilder.addPrompt",
+        "title": "Add Prompt",
+        "category": "AI Builder",
+        "icon": "$(add)"
+      },
+      {
+        "command": "aiBuilder.addTask",
+        "title": "Add Task",
+        "category": "AI Builder",
+        "icon": "$(add)"
+      },
+      {
+        "command": "aiBuilder.runShortcut",
+        "title": "Run Terminal Shortcut",
+        "category": "AI Builder",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "aiBuilder.exportMemory",
+        "title": "Export Project Memory",
+        "category": "AI Builder",
+        "icon": "$(clippy)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "aiBuilder.addPrompt",
+          "when": "view == aiBuilderWorkspace.sidebar",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext .ts",
+    "check:webview": "node scripts/check-webview.js",
+    "check": "npm run compile && npm run lint && npm run check:webview",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "eslint": "^10.4.0",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.59.4"
+  }
+}
